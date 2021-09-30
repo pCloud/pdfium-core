@@ -10,22 +10,6 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/lib/$(ARCH_PATH)/libmodpdfium.so
 
 include $(PREBUILT_SHARED_LIBRARY)
 
-#libmodft2
-include $(CLEAR_VARS)
-LOCAL_MODULE := libmodft2
-
-LOCAL_SRC_FILES := $(LOCAL_PATH)/lib/$(ARCH_PATH)/libmodft2.so
-
-include $(PREBUILT_SHARED_LIBRARY)
-
-#libmodpng
-include $(CLEAR_VARS)
-LOCAL_MODULE := libmodpng
-
-LOCAL_SRC_FILES := $(LOCAL_PATH)/lib/$(ARCH_PATH)/libmodpng.so
-
-include $(PREBUILT_SHARED_LIBRARY)
-
 #Main JNI library
 include $(CLEAR_VARS)
 LOCAL_MODULE := jniPdfium
