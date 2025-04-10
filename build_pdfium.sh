@@ -1,5 +1,8 @@
 #! /bin/bash
 
+# current the latest stable android branch (09.04.2025)
+githash=3d8aaf4460d8141f064acdbed71925d0e2a3389e
+
 # if want to run this from somewhere other then /data adjust below
 basedir=/home/pdfium/data
 
@@ -27,9 +30,13 @@ export PATH=$PATH:$basedir/depot_tools/
 
 cd build/source/
 
-gclient config --unmanaged https://pdfium.googlesource.com/pdfium.git
+gclient config --unmanaged https://pdfium.googlesource.com/pdfium.git@$githash
 
 echo "target_os = [ 'android' ]" >> .gclient
+
+if [ ! -e pdfium ]; then
+	ln -s pdfium.git@$githash pdfium
+fi
 
 gclient sync
 

@@ -2,18 +2,20 @@
 
 ## Instructions
 
-1. **Copy `build_pdfium.sh` to a Linux-based virtual machine:**
-    - Copy the script `build_pdfium.sh` (or its content) to your Linux VM.
+1. **Copy `build_pdfium.sh` to a Linux-based machine:**
+    - Copy the script `build_pdfium.sh` (or its content) on a Linux based machine.
 
-2. **Edit `basedir` and grant execution permissions:**
+2. **Edit `basedir`, `githash` and grant execution permissions:**
     - Open the `build_pdfium.sh` file in a text editor.
-    - Edit the `basedir` variable to specify the desired directory where you want the PDFium project to be cloned.
+    - (Optional) Edit the `basedir` variable to specify the desired directory where you want the PDFium project to be cloned.
+    - (Optional) Edit the `githash` to the latest stable pdfium version 
     - Grant execute permissions to the script using the command:
       ```bash
       chmod +x build_pdfium.sh
       ```
 
 3. **Run the script:**
+    - Make sure no `depot_tools` are present in your `$PATH` variable if they are remove them
     - Execute the script and wait for it to finish. This will clone the latest stable branch of the PDFium repository into the specified directory along with all required dependencies and third-party libraries.
       ```bash
       ./build_pdfium.sh
@@ -26,11 +28,11 @@
       ```gn
       cflags = [
           "-fvisibility=default",
-          "-Oz",  # This reduces the size of the final binary
+          "-Oz"  #This reduces the size of the final binary (use only for release builds) 
+                  https://clang.llvm.org/docs/CommandGuide/clang.html#code-generation-options
       ]
       ldflags = [
-          "-Wl,-export-dynamic",      # Export dynamic symbols
-          "-Wl,-z,max-page-size=16384",  # Set max page size
+          "-Wl,-export-dynamic"      # Export dynamic symbols
       ]
       include_dirs = [ "." ]
       defines = ["FPDFSDK_EXPORTS"]
@@ -58,19 +60,27 @@
       ```
     - Save and exit the file.
 
-6. **Copy `build.sh` to the PDFium repository:**
+6. **(Optional) Edit `BUILD.gn` and `config.gni` in `../build/config/android`:**
+   - Navigate to the `../build/config/android` directory.
+   - (Optional) Open the `BUILD.gn` file in a text editor to change the page size number for 16 KB page sizes
+     - Search for the `_max_page_size` section and update the value to `16384` this will ensure tha:
+   - (Optional) Change `default_android_ndk_version` in `config.gni`
+   
+7. **Copy `build.sh` to the PDFium repository:**
     - Copy the `build.sh` script (or its content) from your project into the `../pdfium/` repository folder.
     - Grant execute permissions to the script using the command:
       ```bash
       chmod +x build.sh
       ```
 
-7. **Run the build script:**
+8. **Run the build script:**
     - Execute the `build.sh` script to generate PDFium artifacts for `arm`, `arm64`, `x86`, and `x64` build targets.
     - The default `--args` list is optimized for building pdfium for android without using `v8`, `xfa` and `skia`
       ```bash
       ./build.sh
       ```
 
-8. **Locate the generated files:**
-    - After execution, a zip file containing all required `.so` files for different architectures and all public `*.h` files will be created in the `../pdfium/libmodpdfium/` folder.
+9. **Locate the generated files:**
+    - After execution, a `libmodpdfium.zip` in the `../pdfium/libmodpdfium/` folder.
+    - The zip file contains the `.so` files for different architectures 
+    - It also contains all `*.h` files from `public/*.h` in the pdfium repository
