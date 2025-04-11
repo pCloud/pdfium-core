@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.2'
+        classpath 'com.android.tools.build:gradle:8.9.1'
     }
 }
 
@@ -16,13 +16,16 @@ plugins {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 31
-    ndkVersion "21.1.6352462"
+    namespace = "com.shockwave.pdfium"
+    ndkVersion = "29.0.13113456"
+    compileSdkVersion 35
+
+    buildFeatures.buildConfig = true
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 31
-        versionCode 2
+        minSdkVersion 24
+        targetSdkVersion 35
+        versionCode 1
         versionName "2.0.0"
 
         buildConfigField("String", 'VERSION_NAME', "\"${versionName}\"")
@@ -30,6 +33,11 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.toVersion(JavaVersion.VERSION_11)
+        targetCompatibility JavaVersion.toVersion(JavaVersion.VERSION_11)
     }
 
     buildTypes {
@@ -55,6 +63,13 @@ android {
     packagingOptions{
         doNotStrip "*.so"
     }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 
 repositories {
@@ -64,7 +79,7 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.core:core:1.6.0'
+    implementation 'androidx.core:core:1.15.0'
 }
 
 afterEvaluate {
@@ -78,7 +93,7 @@ afterEvaluate {
                 // You can then customize attributes of the publication as shown below.
                 groupId = 'com.pcloud'
                 artifactId = 'pdfium-core'
-                version = '1.0.0'
+                version = '2.0.0'
             }
         }
     }

@@ -618,7 +618,7 @@ JNI_FUNC(jlong, PdfiumCore, nativeGetBookmarkDestIndex)(JNI_ARGS, jlong docPtr, 
     if (dest == NULL) {
         return -1;
     }
-    return (jlong) FPDFDest_GetPageIndex(doc->pdfDocument, dest);
+    return (jlong) FPDFDest_GetDestPageIndex(doc->pdfDocument, dest);
 }
 
 JNI_FUNC(jlongArray, PdfiumCore, nativeGetPageLinks)(JNI_ARGS, jlong pagePtr) {
@@ -642,7 +642,7 @@ JNI_FUNC(jobject, PdfiumCore, nativeGetDestPageIndex)(JNI_ARGS, jlong docPtr, jl
     if (dest == NULL) {
         return NULL;
     }
-    unsigned long index = FPDFDest_GetPageIndex(doc->pdfDocument, dest);
+    unsigned long index = FPDFDest_GetDestPageIndex(doc->pdfDocument, dest);
     return NewInteger(env, (jint) index);
 }
 
@@ -657,9 +657,13 @@ JNI_FUNC(jstring, PdfiumCore, nativeGetLinkURI)(JNI_ARGS, jlong docPtr, jlong li
     if (bufferLen <= 0) {
         return env->NewStringUTF("");
     }
-    std::string uri;
-    FPDFAction_GetURIPath(doc->pdfDocument, action, WriteInto(&uri, bufferLen), bufferLen);
-    return env->NewStringUTF(uri.c_str());
+    char uri[bufferLen];
+    auto result = FPDFAction_GetURIPath(doc->pdfDocument, action, &uri, bufferLen);
+    if (result != bufferLen) {
+       return NULL;
+    } else {
+        return env->NewStringUTF(uri);
+    }
 }
 
 JNI_FUNC(jobject, PdfiumCore, nativeGetLinkRect)(JNI_ARGS, jlong linkPtr) {
