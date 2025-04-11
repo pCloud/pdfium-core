@@ -37,13 +37,19 @@
       include_dirs = [ "." ]
       defines = ["FPDFSDK_EXPORTS"]
       ```
-    - Add a new `shared_library` entry:
+    - (OPTIONAL) If you want to build pdfium as a shared lib  add a `shared_library` entry:
       ```gn
       shared_library("modpdfium") {
         deps = [":pdfium", "//buildtools/third_party/libunwind"]
         if (target_os == "android") {
           configs -= [ "//build/config/android:hide_all_but_jni_onload" ]
         }
+      }
+      ```
+    - (OPTIONAL) If you want to build pdfium as static_lib add a `static_library` entry:
+      ```gn
+      shared_library("modpdfium") {
+        deps = [":pdfium"]
       }
       ```
     - Save and exit the file.
@@ -66,15 +72,15 @@
      - Search for the `_max_page_size` section and update the value to `16384` this will ensure tha:
    - (Optional) Change `default_android_ndk_version` in `config.gni`
    
-7. **Copy `build.sh` to the PDFium repository:**
-    - Copy the `build.sh` script (or its content) from your project into the `../pdfium/` repository folder.
+7. **Build PDFium :**
+    - Depending on what type of output you want either copy `build_shared_lib.sh` or `build_static_lib.sh` into the `../pdfium/` repository folder
     - Grant execute permissions to the script using the command:
       ```bash
       chmod +x build.sh
       ```
 
 8. **Run the build script:**
-    - Execute the `build.sh` script to generate PDFium artifacts for `arm`, `arm64`, `x86`, and `x64` build targets.
+    - Execute the above script to generate PDFium artifacts for `arm`, `arm64`, `x86`, and `x64` build targets.
     - The default `--args` list is optimized for building pdfium for android without using `v8`, `xfa` and `skia`
       ```bash
       ./build.sh
@@ -82,5 +88,5 @@
 
 9. **Locate the generated files:**
     - After execution, a `libmodpdfium.zip` in the `../pdfium/libmodpdfium/` folder.
-    - The zip file contains the `.so` files for different architectures 
+    - The zip contains the `.so`  or `.a` files for different architectures 
     - It also contains all `*.h` files from `public/*.h` in the pdfium repository
