@@ -7,28 +7,16 @@ Forked for use with [AndroidPdfViewer](https://github.com/barteksc/AndroidPdfVie
 
 API is highly compatible with original version, only additional methods were created.
 
-## What's new in 1.9.0?
-* Updated Pdfium library to 7.1.2_r36
-* Changed `gnustl_static` to `c++_shared`
-* Update Gradle plugins
-* Update compile SDK and support library to 26
-* Change minimum SDK to 14
-* Add support for mips64
+## What's new in 2.1.0?
+* Change `libmodpdfium.so` to use precompiled libs from `https://github.com/bblanchon/pdfium-binaries`
+* Update supporting public `*.h` files
 
 ## Installation
 Add to _build.gradle_:
 
-`compile 'com.github.barteksc:pdfium-android:1.9.0'`
+`implementation 'com.github.pcloud:pdfium-core:2.1.0'`
 
 Library is available in jcenter and Maven Central repositories.
-
-## Methods inconsistency
-Version 1.8.0 added method for getting page size - `PdfiumCore#getPageSize(...)`.
-It is important to note, that this method does not require page to be opened. However, there are also
-old `PdfiumCore#getPageWidth(...)`, `PdfiumCore#getPageWidthPoint(...)`, `PdfiumCore#getPageHeight()`
-and `PdfiumCore#getPageHeightPoint()` which require page to be opened.
-
-This inconsistency will be resolved in next major version, which aims to redesign API.
 
 ## Reading links
 Version 1.8.0 introduces `PdfiumCore#getPageLinks(PdfDocument, int)` method, which allows to get list
