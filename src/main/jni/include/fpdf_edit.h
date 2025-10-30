@@ -9,7 +9,7 @@
 
 #include <stdint.h>
 
-// NOLINTNEXTLINE(build/include)
+// NOLINTNEXTLINE(build/include_directory)
 #include "fpdfview.h"
 
 #define FPDF_ARGB(a, r, g, b)                                      \
@@ -186,6 +186,24 @@ FPDF_EXPORT void FPDF_CALLCONV FPDFPage_SetRotation(FPDF_PAGE page, int rotate);
 //                 automatically freed.
 FPDF_EXPORT void FPDF_CALLCONV
 FPDFPage_InsertObject(FPDF_PAGE page, FPDF_PAGEOBJECT page_object);
+
+// Insert |page_object| into |page| at the specified |index|.
+//
+//   page        - handle to a page
+//   page_object - handle to a page object as previously obtained by
+//                 FPDFPageObj_CreateNew{Path|Rect}() or
+//                 FPDFPageObj_New{Text|Image}Obj(). Ownership of the object
+//                 is transferred back to PDFium.
+//   index       - the index position to insert the object at. If index equals
+//                 the current object count, the object will be appended to the
+//                 end. If index is greater than the object count, the function
+//                 will fail and return false.
+//
+// Returns true if successful.
+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
+FPDFPage_InsertObjectAtIndex(FPDF_PAGE page,
+                             FPDF_PAGEOBJECT page_object,
+                             size_t index);
 
 // Experimental API.
 // Remove |page_object| from |page|.
@@ -531,6 +549,22 @@ FPDFPageObjMark_GetParamIntValue(FPDF_PAGEOBJECTMARK mark,
                                  int* out_value);
 
 // Experimental API.
+// Get the value of a number property in a content mark by key as float.
+// FPDFPageObjMark_GetParamValueType() should have returned FPDF_OBJECT_NUMBER
+// for this property.
+//
+//   mark      - handle to a content mark.
+//   key       - string key of the property.
+//   out_value - pointer to variable that will receive the value. Not filled if
+//               false is returned.
+//
+// Returns TRUE if the key maps to a number value, FALSE otherwise.
+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
+FPDFPageObjMark_GetParamFloatValue(FPDF_PAGEOBJECTMARK mark,
+                                   FPDF_BYTESTRING key,
+                                   float* out_value);
+
+// Experimental API.
 // Get the value of a string property in a content mark by key.
 //
 //   mark       - handle to a content mark.
@@ -592,6 +626,25 @@ FPDFPageObjMark_SetIntParam(FPDF_DOCUMENT document,
                             FPDF_PAGEOBJECTMARK mark,
                             FPDF_BYTESTRING key,
                             int value);
+
+// Experimental API.
+// Set the value of a float property in a content mark by key. If a parameter
+// with key |key| exists, its value is set to |value|. Otherwise, it is added as
+// a new parameter.
+//
+//   document    - handle to the document.
+//   page_object - handle to the page object with the mark.
+//   mark        - handle to a content mark.
+//   key         - string key of the property.
+//   value       - float value to set.
+//
+// Returns TRUE if the operation succeeded, FALSE otherwise.
+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
+FPDFPageObjMark_SetFloatParam(FPDF_DOCUMENT document,
+                              FPDF_PAGEOBJECT page_object,
+                              FPDF_PAGEOBJECTMARK mark,
+                              FPDF_BYTESTRING key,
+                              float value);
 
 // Experimental API.
 // Set the value of a string property in a content mark by key. If a parameter
@@ -1616,6 +1669,21 @@ FPDFFormObj_CountObjects(FPDF_PAGEOBJECT form_object);
 // Returns the handle to the page object, or NULL on error.
 FPDF_EXPORT FPDF_PAGEOBJECT FPDF_CALLCONV
 FPDFFormObj_GetObject(FPDF_PAGEOBJECT form_object, unsigned long index);
+
+// Experimental API.
+//
+// Remove |page_object| from |form_object|.
+//
+//   form_object - handle to a form object.
+//   page_object - handle to a page object to be removed from the form.
+//
+// Returns TRUE on success.
+//
+// Ownership of the removed |page_object| is transferred to the caller.
+// Call FPDFPageObj_Destroy() on the removed page_object to free it.
+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
+FPDFFormObj_RemoveObject(FPDF_PAGEOBJECT form_object,
+                         FPDF_PAGEOBJECT page_object);
 
 #ifdef __cplusplus
 }  // extern "C"
