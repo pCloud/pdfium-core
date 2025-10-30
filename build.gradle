@@ -26,7 +26,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 35
         versionCode 1
-        versionName "2.0.0"
+        versionName "2.1.0"
 
         buildConfigField("String", 'VERSION_NAME', "\"${versionName}\"")
 
@@ -93,7 +93,7 @@ afterEvaluate {
                 // You can then customize attributes of the publication as shown below.
                 groupId = 'com.pcloud'
                 artifactId = 'pdfium-core'
-                version = '2.0.0'
+                version = '2.1.0'
             }
         }
     }

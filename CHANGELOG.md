@@ -1,3 +1,17 @@
+## 2.1.0 (2025-10-30)
+* Change `libmodpdfium.so` to use precompiled libs from `https://github.com/bblanchon/pdfium-binaries`
+* Update supporting public `*.h` files
+
+## 2.0.0 (2025-11-04)
+* Add guide for building pdfium native lib
+* Update `libmodpdfium.so` libs with 16kb versions
+* Bump gradle wrapper to 8.13
+* Bump gradle to 8.9.1
+* Set `sourceCompatibility` and `targetCompatibility` to Java 11
+* Bump NDK version to `29.0.13113456`
+* Set `compileSdkVersion`, `targetSdkVersion` to 35 
+* Set `minSdkVersion` to 24
+
 ## 1.9.0 (2018-06-29)
 * Updated Pdfium library to 7.1.2_r36
 * Changed `gnustl_static` to `c++_shared`
